@@ -12,6 +12,6 @@ auto login ssh fast and easy
 ```
 #config file
 ```
-dev	  102.12.xx.101		user_xx		xxxx
-idc 	102.12.xx.101		user_xx		/Users/xxx/.ssh/identity
+dev   102.12.xx.101		user_xx		xxxx
+idc   102.12.xx.101		user_xx		/Users/xxx/.ssh/identity
 ```
