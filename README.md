@@ -7,11 +7,11 @@ auto login ssh fast and easy
 #example
 ```
 ./autossh 102.12.xx.101
-./autossh server name
+./autossh dev
 ./autossh 101
 ```
 #config file
 ```
-test	102.12.xx.101		user_xx		xxxx
-test	102.12.xx.101		user_xx		/Users/xxx/.ssh/identity
+dev	  102.12.xx.101		user_xx		xxxx
+idc 	102.12.xx.101		user_xx		/Users/xxx/.ssh/identity
 ```
