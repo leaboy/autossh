@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# Email: leaboy.w@gmail.com
+# Date: 9/15 2015
+#
+
+if [ ! -n "$1" ]; then
+	echo "usage: ./autossh 102.12.xx.101|server name|101"
+	exit  
+fi
+
+
+SSH_CONFIG=`cat .conffile`
+
+#设置IFS
+SAVEIFS=$IFS
+IFS=$'\n'
+
+for line in $SSH_CONFIG; do
+	#恢复IFS
+	IFS=$SAVEIFS
+
+	list=($line)
+	len=${#list[@]}
+
+	if [ $len -eq 5 ]; then
+		PORT=${list[4]}
+	elif [ $len -lt 5 ]; then
+		PORT=36000
+	elif [[ $len -lt 4 ]]; then
+		continue
+	fi
+
+	SVRNAME=${list[0]}
+	IP=${list[1]}
+	NAME=${list[2]}
+	PASS=${list[3]}
+
+	MACTH_IP=`echo $IP | awk -F\. '{ print $4 }'`
+
+	if [ "$1" == "$SVRNAME" ] || [ "$1" == "$IP" ] || [ $1 -eq $MACTH_IP ] ; then
+		FILE='/tmp/.login.sh'
+		if [ "$PORT" == "" ]; then
+			PORT=36000
+		fi
+
+		echo '#!/usr/bin/expect -f' > $FILE
+		echo 'set timeout 30' >> $FILE
+
+		if [ -f "$PASS" ]; then
+			IDENTITY=`echo ${PASS} | awk -F\: '{ print $1 }'`
+			echo "spawn ssh -i "$IDENTITY" -p$PORT -l "$NAME $IP >> $FILE
+		else
+			PASS=`echo ${PASS} | sed -e "s/\\\\$/\\\\\\\\$/g"`
+			echo "spawn ssh -p$PORT -l "$NAME $IP >> $FILE
+			echo 'expect "Password:"' >> $FILE
+			echo 'send   '$PASS"\r" >> $FILE
+		fi
+
+		echo 'expect "Last*"' >> $FILE
+		echo 'send "PROMPT_COMMAND='\''echo -ne \"\\033]0;\${USER}@'$IP':\${PWD/#\$HOME/~}\"; echo -ne \"\\007\"\x27\r"' >> $FILE
+		echo 'interact' >> $FILE
+
+		chmod a+x $FILE
+		$FILE
+		echo '' > $FILE
+		break;
+	fi
+done
