@@ -38,7 +38,7 @@ for line in $SSH_CONFIG; do
 
 	MACTH_IP=`echo $IP | awk -F\. '{ print $4 }'`
 
-	if [ "$1" == "$SVRNAME" ] || [ "$1" == "$IP" ] || [ $1 -eq $MACTH_IP ] ; then
+	if [ "$1" == "$SVRNAME" ] || [ "$1" == "$IP" ] || [ "$1" == "$MACTH_IP" ] ; then
 		FILE='/tmp/.login.sh'
 		if [ "$PORT" == "" ]; then
 			PORT=36000
