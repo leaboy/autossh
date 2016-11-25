@@ -53,7 +53,7 @@ for line in $SSH_CONFIG; do
 		else
 			PASS=`echo ${PASS} | sed -e "s/\\\\$/\\\\\\\\$/g"`
 			echo "spawn ssh -p$PORT -l "$NAME $IP >> $FILE
-			echo 'expect "Password:"' >> $FILE
+			echo 'expect -nocase "Password:"' >> $FILE
 			echo 'send   '$PASS"\r" >> $FILE
 		fi
 
