@@ -33,8 +33,9 @@ for line in $SSH_CONFIG; do
 
 	SVRNAME=${list[0]}
 	IP=${list[1]}
-	NAME=${list[2]}
-	PASS=${list[3]}
+	NAME=${2:-${list[2]}}
+	PASS=${3:-${list[3]}}
+	PORT=${4:-${PORT}}
 
 	MACTH_IP=`echo $IP | awk -F\. '{ print $4 }'`
 
